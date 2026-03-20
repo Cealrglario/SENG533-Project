@@ -1,0 +1,14 @@
+services:
+  apache_sut:
+    build: ./apache-server
+    ports:
+      # [Localhost Port] : [Container Port (set up in Dockerfile)]
+      - "9000:80" # standard port 80 web traffic
+    cpuset: "0,1" # 2-core test
+
+  node_sut:
+    build: ./node-server
+    ports:
+      # [Localhost Port] : [Container Port (set up in Dockerfile)]
+      - "7000:3000"
+    cpuset: "0,1" # 2-core test
