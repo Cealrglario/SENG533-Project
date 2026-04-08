@@ -1,5 +1,6 @@
 services:
   apache_sut:
+    container_name: apache_container
     build: ./apache-server
     ports:
       # [Localhost Port] : [Container Port (set up in Dockerfile)]
@@ -7,6 +8,7 @@ services:
     cpuset: "${APACHE_CPU_SET:-0}" # CPU core count depends on bash script (to promote automation), default core 0 if cant read
 
   node_sut:
+    container_name: node_container
     build: ./node-server
     ports:
       # [Localhost Port] : [Container Port (set up in Dockerfile)]

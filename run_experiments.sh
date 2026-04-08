@@ -55,6 +55,21 @@ for core in "${CORES[@]}"; do
                     
                     echo "Running: $LOCUST_CLASS | Cores: $core | Users: $user_count | Run: $run of $TOTAL_RUNS"
                     
+                    # Determine which container we are testing
+                    if [ "$arch" == "Apache" ]; then
+                        TARGET_CONTAINER="apache_container"
+                    else
+                        TARGET_CONTAINER="node_container"
+                    fi
+
+                    # Start logging CPU utilization
+                    echo "Time,CPU_Percentage" > "${FILE_PREFIX}_cpu.csv"
+                    (while true; do
+                        docker stats $TARGET_CONTAINER --no-stream --format "{{.CPUPerc}}" | sed 's/%//' >> "${FILE_PREFIX}_cpu.csv"
+                        sleep 1
+                    done) &
+                    CPU_LOGGER_PID=$!
+
                     # Force Locust to run ONLY on any one of the logical cores 2 through 9
                     # This prevents it from touching the P-cores assigned to Docker and prevents resource contention
                     taskset -c 2-9 locust -f locustfile.py "$LOCUST_CLASS" \
@@ -64,6 +79,9 @@ for core in "${CORES[@]}"; do
                         --run-time "$DURATION" \
                         --csv "$FILE_PREFIX" \
                         --only-summary
+
+                    # Stop the CPU logger when Locust finishes
+                    kill $CPU_LOGGER_PID
 
                 done
             done
