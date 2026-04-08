@@ -4,11 +4,11 @@ services:
     ports:
       # [Localhost Port] : [Container Port (set up in Dockerfile)]
       - "9000:80" # standard port 80 web traffic
-    cpuset: "0,1" # 2-core test
+    cpuset: "${APACHE_CPU_SET:-0}" # CPU core count depends on bash script (to promote automation), default core 0 if cant read
 
   node_sut:
     build: ./node-server
     ports:
       # [Localhost Port] : [Container Port (set up in Dockerfile)]
       - "7000:3000"
-    cpuset: "0,1" # 2-core test
+    cpuset: "${NODE_CPU_SET:-12}" # CPU core count depends on bash script (to promote automation), default core 12 if cant read
