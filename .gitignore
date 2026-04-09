@@ -1,2 +1,7 @@
 .venv
+.venv-wsl
 __pycache__
+graphs/*
+results/*
+!graphs/placeholder.txt
+!results/placeholder.txt
