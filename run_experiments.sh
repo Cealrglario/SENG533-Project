@@ -21,7 +21,7 @@ WORKLOADS=("Static" "Dynamic")
 USERS=(50 100 200)
 TOTAL_RUNS=10
 
-DURATION="30s"
+DURATION="20s"
 SPAWN_RATE=20
 
 mkdir -p results
