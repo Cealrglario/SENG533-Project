@@ -20,11 +20,11 @@ NODE_CORES[4]="12,13,22,23"
 # Define experimental factors
 CORES=(1 4)
 ARCHITECTURES=("Apache" "Node")
-WORKLOADS=("Static" "Dynamic")
-USERS=(50)
-TOTAL_RUNS=3
+WORKLOADS=("Dynamic")
+USERS=(100)
+TOTAL_RUNS=1
 
-DURATION="5s"
+DURATION="15s"
 SPAWN_RATE=20
 
 mkdir -p results
@@ -66,7 +66,7 @@ for core in "${CORES[@]}"; do
                     fi
 
                     # Start logging CPU utilization
-                    echo "Time,CPU_Percentage" > "${FILE_PREFIX}_cpu.csv"
+                    echo "CPU_Percentage" > "${FILE_PREFIX}_cpu.csv"
                     (while true; do
                         docker stats $TARGET_CONTAINER --no-stream --format "{{.CPUPerc}}" | sed 's/%//' >> "${FILE_PREFIX}_cpu.csv"
                         sleep 1
@@ -75,7 +75,7 @@ for core in "${CORES[@]}"; do
 
                     # Force Locust to run ONLY on any one of the logical cores 2 through 9
                     # This prevents it from touching the P-cores assigned to Docker and prevents resource contention
-                    taskset -c 2-9 locust -f locustfile.py "$LOCUST_CLASS" \
+                    taskset -c 2-9 python3 -m locust -f locustfile.py "$LOCUST_CLASS" \
                         --headless \
                         -u "$user_count" \
                         -r "$SPAWN_RATE" \
