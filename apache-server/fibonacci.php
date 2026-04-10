@@ -5,5 +5,5 @@ function calculateFibonacci($n) {
     return calculateFibonacci($n - 1) + calculateFibonacci($n - 2);
 }
 
-echo "Fibonacci 35: " . calculateFibonacci(35);
+echo "Fibonacci 15: " . calculateFibonacci(15);
 ?>

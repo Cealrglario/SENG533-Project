@@ -17,9 +17,9 @@ http.createServer((req, res) => {
 
     // ROUTE FOR DYNAMIC WEB SERVER REQUEST
     else if (req.url === '/fibonacci') {
-        const result = calculateFibonacci(35);
+        const result = calculateFibonacci(15);
         res.writeHead(200, {'Content-Type': 'text/plain'}); // reply with 200 OK and indicate that response header includes plain text
-        res.end(`Fibonacci 35: ${result}`);
+        res.end(`Fibonacci 15: ${result}`);
     }
 
     else {
