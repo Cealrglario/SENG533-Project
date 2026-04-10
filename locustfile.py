@@ -1,4 +1,4 @@
-from locust import HttpUser, TaskSet, task, between
+from locust import HttpUser, TaskSet, task, constant
 
 
 # Define tasks for Apache server
@@ -31,7 +31,7 @@ class NodeTasks(TaskSet):
 
 # Define Apache static user - connects to Apache server on port 9000
 class ApacheStaticUser(HttpUser):
-    wait_time = between(1, 3)  # Simulate wait time between requests (1-3 seconds)
+    wait_time = constant(0)
     host = "http://localhost:9000"  # Apache server on port 9000
 
     @task
@@ -41,7 +41,7 @@ class ApacheStaticUser(HttpUser):
 
 # Define Apache dynamic user - connects to Apache server on port 9000
 class ApacheDynamicUser(HttpUser):
-    wait_time = between(1, 3)
+    wait_time = constant(0)
     host = "http://localhost:9000"
 
     @task
@@ -51,7 +51,7 @@ class ApacheDynamicUser(HttpUser):
 
 # Define Node.js static user - connects to Node server on port 7000
 class NodeStaticUser(HttpUser):
-    wait_time = between(1, 3)  # Simulate wait time between requests (1-3 seconds)
+    wait_time = constant(0)
     host = "http://localhost:7000"  # Node server on port 7000
 
     @task
@@ -61,7 +61,7 @@ class NodeStaticUser(HttpUser):
 
 # Define Node.js dynamic user - connects to Node server on port 7000
 class NodeDynamicUser(HttpUser):
-    wait_time = between(1, 3)  # Simulate wait time between requests (1-3 seconds)
+    wait_time = constant(0)
     host = "http://localhost:7000"  # Node server on port 7000
 
     @task

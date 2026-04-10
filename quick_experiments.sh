@@ -22,10 +22,10 @@ CORES=(1 4)
 ARCHITECTURES=("Apache" "Node")
 WORKLOADS=("Dynamic")
 USERS=(100)
-TOTAL_RUNS=1
+TOTAL_RUNS=3
 
-DURATION="15s"
-SPAWN_RATE=20
+DURATION="45s"
+SPAWN_RATE=50
 
 mkdir -p results
 
@@ -50,6 +50,17 @@ for core in "${CORES[@]}"; do
         for load in "${WORKLOADS[@]}"; do
 
             LOCUST_CLASS="${arch}${load}User"
+
+            # Warm-up phase to prevent first runs from being wildly inaccurate
+            echo "Warming up $arch server for $load workload (10s)..."
+            taskset -c 2-9 python3 -m locust -f locustfile.py "$LOCUST_CLASS" \
+                --headless \
+                -u 20 \
+                -r 20 \
+                --run-time "10s" \
+                --only-summary > /dev/null 2>&1
+            sleep 2
+            # --------------------------
 
             for user_count in "${USERS[@]}"; do
                 for (( run=1; run<=TOTAL_RUNS; run++ )); do
